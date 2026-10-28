@@ -1,10 +1,21 @@
 import React from 'react';
-import { LayoutDashboard, Calculator, Building, Users, Settings } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Calculator,
+  Building,
+  Users,
+  Settings,
+} from 'lucide-react';
 
-export default function BottomNav({ currentTab, setCurrentTab }) {
+interface BottomNavProps {
+  currentTab: string;
+  setCurrentTab: (tab: string) => void;
+}
+
+export function BottomNav({ currentTab, setCurrentTab }: BottomNavProps) {
   const navItems = [
     { id: 'dashboard', label: 'ภาพรวม', icon: LayoutDashboard },
-    { id: 'utilities', label: 'จดมิเตอร์', icon: Calculator, badge: '5' },
+    { id: 'utilities', label: 'จดมิเตอร์', icon: Calculator, badge: '3' },
     { id: 'rooms', label: 'ห้องพัก', icon: Building },
     { id: 'renters', label: 'ผู้เช่า', icon: Users },
     { id: 'settings', label: 'ตั้งค่า', icon: Settings },
@@ -20,7 +31,9 @@ export default function BottomNav({ currentTab, setCurrentTab }) {
             key={item.id}
             onClick={() => setCurrentTab(item.id)}
             className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all relative ${
-              isActive ? 'text-blue-600 font-semibold' : 'text-slate-400 font-normal hover:text-slate-600'
+              isActive
+                ? 'text-blue-600 font-semibold'
+                : 'text-slate-400 font-normal hover:text-slate-600'
             }`}
           >
             <div className="relative">

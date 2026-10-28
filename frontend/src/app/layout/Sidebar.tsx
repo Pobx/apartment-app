@@ -1,10 +1,32 @@
 import React from 'react';
-import { LayoutDashboard, Calculator, Building, Users, Receipt, Settings, LogOut } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Calculator,
+  Building,
+  Users,
+  Settings,
+  LogOut,
+} from 'lucide-react';
 
-export default function Sidebar({ currentTab, setCurrentTab }) {
+interface SidebarProps {
+  currentTab: string;
+  setCurrentTab: (tab: string) => void;
+  onLogout?: () => void;
+}
+
+export function Sidebar({
+  currentTab,
+  setCurrentTab,
+  onLogout,
+}: SidebarProps) {
   const menuItems = [
     { id: 'dashboard', label: 'แดชบอร์ดสรุปผล', icon: LayoutDashboard },
-    { id: 'utilities', label: 'บันทึกค่าน้ำ-ไฟ', icon: Calculator, badge: '5 รอจด' },
+    {
+      id: 'utilities',
+      label: 'บันทึกค่าน้ำ-ไฟ',
+      icon: Calculator,
+      badge: '3 รอจด',
+    },
     { id: 'rooms', label: 'ผังห้องพักและอาคาร', icon: Building },
     { id: 'renters', label: 'ทะเบียนผู้เช่า', icon: Users },
     { id: 'settings', label: 'ตั้งค่าหน่วย & ราคา', icon: Settings },
@@ -31,7 +53,11 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-blue-600' : 'text-slate-400'}`} />
+                  <Icon
+                    className={`w-4 h-4 ${
+                      isActive ? 'text-blue-600' : 'text-slate-400'
+                    }`}
+                  />
                   <span>{item.label}</span>
                 </div>
                 {item.badge && (
@@ -46,16 +72,16 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
       </div>
 
       <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-        <div className="text-xs text-slate-400">
-          ApartmentOS v2.0
-        </div>
-        <button
-          onClick={() => alert('ออกจากระบบ Keycloak แล้ว')}
-          className="text-slate-400 hover:text-rose-500 p-1.5 rounded-lg hover:bg-rose-50 transition-colors"
-          title="ออกจากระบบ"
-        >
-          <LogOut className="w-4 h-4" />
-        </button>
+        <div className="text-xs text-slate-400">ApartmentOS v2.0</div>
+        {onLogout && (
+          <button
+            onClick={onLogout}
+            className="text-slate-400 hover:text-rose-500 p-1.5 rounded-lg hover:bg-rose-50 transition-colors"
+            title="ออกจากระบบ"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
+        )}
       </div>
     </aside>
   );

@@ -1,7 +1,20 @@
 import React from 'react';
-import { Building2, Bell, LogOut, ChevronDown } from 'lucide-react';
+import { Bell, LogOut } from 'lucide-react';
+import { AuthUser } from '@/features/auth';
 
-export default function Navbar({ currentApartment, onOpenBillModal, currentUser, onLogout }) {
+interface NavbarProps {
+  currentApartment?: string;
+  onOpenBillModal?: () => void;
+  currentUser: AuthUser | null;
+  onLogout: () => void;
+}
+
+export function Navbar({
+  currentApartment,
+  onOpenBillModal,
+  currentUser,
+  onLogout,
+}: NavbarProps) {
   const isStaff = currentUser?.isStaff && !currentUser?.isAdmin;
 
   return (
@@ -39,7 +52,9 @@ export default function Navbar({ currentApartment, onOpenBillModal, currentUser,
         {/* User Info & Logout */}
         <div className="flex items-center gap-2.5 pl-2 sm:pl-3 border-l border-slate-100">
           <div className="w-8 h-8 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-xs font-semibold text-blue-700">
-            {currentUser?.username ? currentUser.username.slice(0, 2).toUpperCase() : 'U'}
+            {currentUser?.username
+              ? currentUser.username.slice(0, 2).toUpperCase()
+              : 'U'}
           </div>
           <div className="hidden md:block text-left">
             <div className="text-xs font-semibold text-slate-900 leading-tight">
@@ -47,7 +62,9 @@ export default function Navbar({ currentApartment, onOpenBillModal, currentUser,
             </div>
             <div className="text-[10px] text-emerald-600 font-medium flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-              {currentUser?.isAdmin ? 'Admin (ผู้จัดการ)' : 'Staff (เจ้าหน้าที่)'}
+              {currentUser?.isAdmin
+                ? 'Admin (ผู้จัดการ)'
+                : 'Staff (เจ้าหน้าที่)'}
             </div>
           </div>
 
