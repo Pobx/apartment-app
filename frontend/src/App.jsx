@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/layout/Navbar';
 import Sidebar from './components/layout/Sidebar';
 import BottomNav from './components/layout/BottomNav';
@@ -10,12 +10,31 @@ import Settings from './pages/Settings';
 import MeterRecordModal from './pages/MeterRecordModal';
 import BillPreviewModal from './pages/BillPreviewModal';
 import WalkthroughModal from './pages/WalkthroughModal';
+import Login from './pages/Login';
+import { getCurrentUser, logout } from './api/auth';
 
 export default function App() {
+  const [currentUser, setCurrentUser] = useState(() => getCurrentUser());
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [isBillOpen, setIsBillOpen] = useState(false);
   const [isWalkthroughOpen, setIsWalkthroughOpen] = useState(false);
   const [recordingRoom, setRecordingRoom] = useState(null);
+
+  // If user is not logged in, render the Login screen
+  if (!currentUser) {
+    return (
+      <Login
+        onLoginSuccess={(user) => {
+          setCurrentUser(user);
+        }}
+      />
+    );
+  }
+
+  const handleLogout = () => {
+    logout();
+    setCurrentUser(null);
+  };
 
   const handleRecordMeter = (room) => {
     setRecordingRoom(room);
@@ -30,6 +49,8 @@ export default function App() {
       <Navbar
         currentApartment="แกรนด์ วิลล์ อาคาร A"
         onOpenBillModal={() => setIsBillOpen(true)}
+        currentUser={currentUser}
+        onLogout={handleLogout}
       />
 
       <div className="flex-1 flex max-w-7xl w-full mx-auto">
