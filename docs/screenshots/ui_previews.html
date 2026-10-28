@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApartmentOS - Modern UI/UX Preview (Kanit Edition)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap');
+    
+    * {
+      font-family: 'Kanit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Soft smooth shadows */
+    .card-shadow {
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+    }
+    .card-shadow-hover:hover {
+      box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.06), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+      transform: translateY(-2px);
+    }
+    .glass-header {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 antialiased min-h-screen p-3 md:p-6 lg:p-8">
+
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <!-- Top Command & Control Header -->
+    <header class="bg-white rounded-3xl p-5 md:p-6 card-shadow border border-slate-100 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
+      <div>
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            ฟอนต์ Kanit 100% • ดีไซน์โมเดิร์นสีขาว สบายตา
+          </span>
+          <span class="text-xs text-slate-400 hidden sm:inline">React 18 + Vite + Tailwind + Go Echo</span>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
+          Apartment<span class="text-blue-600 font-light">OS</span> <span class="text-slate-400 font-light text-xl">| ระบบจัดการหอพักยุคใหม่</span>
+        </h1>
+        <p class="text-xs md:text-sm text-slate-500 mt-0.5">
+          โทนสีขาวสะอาดตา ลดความล้าของสายตา ข้อมูลคมชัด พร้อมกราฟวิเคราะห์ข้อมูล และฟังก์ชันจดมิเตอร์สุดสะดวก
+        </p>
+      </div>
+
+      <!-- Actions & Switchers -->
+      <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+        <!-- Viewport Switcher -->
+        <div class="bg-slate-100/80 p-1.5 rounded-2xl flex items-center border border-slate-200/60">
+          <button id="view-desktop-btn" onclick="setViewMode('desktop')" class="px-3.5 py-1.5 rounded-xl text-xs font-medium bg-white text-slate-900 shadow-sm transition-all flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            Desktop (จอคอม)
+          </button>
+          <button id="view-mobile-btn" onclick="setViewMode('mobile')" class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-500 hover:text-slate-900 transition-all flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            Mobile (มือถือ)
+          </button>
+        </div>
+
+        <!-- Design Option Tabs -->
+        <div class="bg-slate-100/80 p-1.5 rounded-2xl flex items-center border border-slate-200/60 overflow-x-auto">
+          <button id="tab-btn-1" onclick="selectConcept(1)" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-blue-600 shadow-sm transition-all whitespace-nowrap">
+            แบบ 1: White Minimalist
+          </button>
+          <button id="tab-btn-2" onclick="selectConcept(2)" class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap">
+            แบบ 2: Modern Studio
+          </button>
+          <button id="tab-btn-3" onclick="selectConcept(3)" class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap">
+            แบบ 3: Smart Inspector (จดมิเตอร์เร็ว)
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Concept Description Pill -->
+    <div id="concept-banner" class="bg-white rounded-2xl p-4 card-shadow border-l-4 border-l-blue-600 border border-slate-100 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg shrink-0">
+          ✨
+        </div>
+        <div>
+          <h3 id="concept-title" class="font-bold text-slate-900 text-sm md:text-base">แบบที่ 1: Clean White Minimalist (โทนขาวละมุน + ข้อมูลชัดเจน)</h3>
+          <p id="concept-desc" class="text-xs text-slate-500 mt-0.5">
+            เน้นความสบายตาด้วยโทนสีขาวสะอาด ตัดเส้นบางด้วย Slate-200 ตัวอักษร Kanit คมชัด อ่านง่าย มีชาร์ตเปรียบเทียบการใช้น้ำ-ไฟที่คลิกดูได้
+          </p>
+        </div>
+      </div>
+      <button onclick="toggleBillModal(true)" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-sm shrink-0">
+        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        ดูตัวอย่างใบแจ้งหนี้ (Bill Preview)
+      </button>
+    </div>
+
+    <!-- Main Viewport Container (Simulates Desktop or iPhone Frame) -->
+    <div id="viewport-frame-container" class="transition-all duration-300 mx-auto w-full">
+
+      <!-- ================= CONCEPT 1: CLEAN WHITE MINIMALIST ================= -->
+      <div id="concept-1" class="concept-view bg-white rounded-3xl border border-slate-100 card-shadow overflow-hidden flex flex-col md:flex-row min-h-[760px]">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-[#FCFDFE] border-r border-slate-100 p-5 flex flex-col justify-between shrink-0">
+          <div class="space-y-6">
+            <!-- Apartment Logo / Picker -->
+            <div class="bg-white p-3 rounded-2xl border border-slate-100 card-shadow flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-blue-500/20">
+                  A
+                </div>
+                <div>
+                  <div class="font-bold text-slate-900 text-sm leading-tight">แกรนด์ วิลล์</div>
+                  <div class="text-[11px] text-slate-400 mt-0.5">2 อาคาร • 48 ห้อง</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+
+            <!-- Main Menu Links -->
+            <div class="space-y-1">
+              <div class="text-[11px] font-medium tracking-wide text-slate-400 px-3 mb-2">ภาพรวม & ปฏิบัติงาน</div>
+              <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-medium bg-blue-50/70 text-blue-700 border border-blue-100">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span>แดชบอร์ดสรุปผล</span>
+              </a>
+              <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-normal text-slate-600 hover:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-3">
+                  <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                  <span>บันทึกค่าน้ำ-ไฟ</span>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 text-amber-600 border border-amber-200/60">5 รอจด</span>
+              </a>
+              <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-normal text-slate-600 hover:bg-slate-50 transition-colors">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                <span>ผังห้องพักและผู้เช่า</span>
+              </a>
+              <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-normal text-slate-600 hover:bg-slate-50 transition-colors">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <span>ออกบิลและใบแจ้งหนี้</span>
+              </a>
+            </div>
+
+            <!-- Settings -->
+            <div class="space-y-1">
+              <div class="text-[11px] font-medium tracking-wide text-slate-400 px-3 mb-2">ระบบ & อัตราค่าบริการ</div>
+              <a href="#" class="flex items-center gap-3 px-3.5 py-2 rounded-2xl text-xs font-normal text-slate-600 hover:bg-slate-50 transition-colors">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span>ตั้งค่าหน่วยน้ำ-ไฟ & แพ็กเกจ</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Bottom Auth Profile -->
+          <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-semibold text-xs text-slate-700">
+                AD
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-slate-900 leading-tight">สมศักดิ์ ผู้จัดการ</div>
+                <div class="text-[10px] text-slate-400">Keycloak: admin role</div>
+              </div>
+            </div>
+            <button class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-rose-50 transition-colors" title="ออกจากระบบ">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            </button>
+          </div>
+        </aside>
+
+        <!-- Main Body -->
+        <main class="flex-1 p-5 md:p-8 space-y-6 overflow-y-auto custom-scrollbar">
+          
+          <!-- Breadcrumb & Date Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+            <div>
+              <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                <span>อาคาร A</span>
+                <span>/</span>
+                <span class="text-slate-700 font-medium">รอบบิล ตุลาคม 2569</span>
+              </div>
+              <h2 class="text-2xl font-bold text-slate-900 tracking-tight">ภาพรวมหอพักประจำเดือน</h2>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="toggleBillModal(true)" class="px-4 py-2 rounded-2xl text-xs font-medium bg-white text-slate-700 border border-slate-200 card-shadow-hover transition-all flex items-center gap-2">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                พิมพ์ใบเสร็จทั้งหมด
+              </button>
+              <button onclick="selectConcept(3)" class="px-4 py-2 rounded-2xl text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-500/20 transition-all flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                จดมิเตอร์งวดนี้
+              </button>
+            </div>
+          </div>
+
+          <!-- 4 KPI Metrics -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <div class="bg-white p-4.5 rounded-3xl border border-slate-100 card-shadow space-y-2">
+              <div class="flex items-center justify-between text-xs text-slate-400">
+                <span>ห้องพักทั้งหมด</span>
+                <span class="w-7 h-7 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs">48</span>
+              </div>
+              <div class="text-3xl font-bold text-slate-900 tracking-tight">45 <span class="text-sm font-light text-slate-400">ห้อง</span></div>
+              <div class="flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>มีผู้เช่าแล้ว (93.8%)</span>
+              </div>
+            </div>
+
+            <div class="bg-white p-4.5 rounded-3xl border border-slate-100 card-shadow space-y-2">
+              <div class="flex items-center justify-between text-xs text-slate-400">
+                <span>ห้องว่างพร้อมเช่า</span>
+                <span class="w-7 h-7 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center font-bold text-xs">3</span>
+              </div>
+              <div class="text-3xl font-bold text-slate-900 tracking-tight">3 <span class="text-sm font-light text-slate-400">ห้อง</span></div>
+              <div class="text-xs text-slate-400 font-normal">
+                ห้อง 104, 203, 301
+              </div>
+            </div>
+
+            <div class="bg-white p-4.5 rounded-3xl border border-slate-100 card-shadow space-y-2">
+              <div class="flex items-center justify-between text-xs text-slate-400">
+                <span>ยอดเรียกเก็บน้ำ-ไฟ</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-medium">งวดปัจจุบัน</span>
+              </div>
+              <div class="text-3xl font-bold text-blue-600 tracking-tight">฿42,580</div>
+              <div class="text-xs text-slate-500">
+                ไฟ 3,420 u • น้ำ 490 u
+              </div>
+            </div>
+
+            <div class="bg-white p-4.5 rounded-3xl border border-slate-100 card-shadow space-y-2">
+              <div class="flex items-center justify-between text-xs text-slate-400">
+                <span>ค้างจดมิเตอร์</span>
+                <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+              </div>
+              <div class="text-3xl font-bold text-amber-600 tracking-tight">5 <span class="text-sm font-light text-slate-400">ห้อง</span></div>
+              <div class="text-xs text-amber-700 font-medium">
+                รอเจ้าหน้าที่กรอกมิเตอร์
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Charts Row: Bar Chart & Occupancy Radial Gauge -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- 6-Month Utility Consumption Bar Chart -->
+            <div class="lg:col-span-2 bg-white rounded-3xl p-6 border border-slate-100 card-shadow space-y-5">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 class="text-base font-bold text-slate-900 tracking-tight">สถิติการใช้ไฟฟ้า & น้ำประปา 6 เดือนล่าสุด</h3>
+                  <p class="text-xs text-slate-400 mt-0.5">คลิกที่แท่งกราฟเพื่อดูสถิติรายเดือน</p>
+                </div>
+                <div class="flex items-center gap-4 text-xs font-medium">
+                  <span class="flex items-center gap-2 text-slate-600">
+                    <span class="w-3 h-3 rounded-md bg-blue-500"></span> ไฟฟ้า (หน่วย)
+                  </span>
+                  <span class="flex items-center gap-2 text-slate-600">
+                    <span class="w-3 h-3 rounded-md bg-sky-300"></span> น้ำประปา (หน่วย)
+                  </span>
+                </div>
+              </div>
+
+              <!-- Interactive Chart Container -->
+              <div class="h-60 flex items-end justify-between gap-2 md:gap-4 pt-4 px-2 border-b border-slate-100">
+                <!-- May -->
+                <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer">
+                  <div class="text-[10px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity font-mono">3,100u</div>
+                  <div class="w-full flex justify-center items-end gap-1.5 h-44">
+                    <div class="w-3.5 md:w-5 bg-blue-500/80 group-hover:bg-blue-600 rounded-t-lg transition-all" style="height: 65%;"></div>
+                    <div class="w-3.5 md:w-5 bg-sky-300 group-hover:bg-sky-400 rounded-t-lg transition-all" style="height: 40%;"></div>
+                  </div>
+                  <span class="text-xs text-slate-500 font-medium">พ.ค.</span>
+                </div>
+                <!-- Jun -->
+                <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer">
+                  <div class="text-[10px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity font-mono">3,300u</div>
+                  <div class="w-full flex justify-center items-end gap-1.5 h-44">
+                    <div class="w-3.5 md:w-5 bg-blue-500/80 group-hover:bg-blue-600 rounded-t-lg transition-all" style="height: 75%;"></div>
+                    <div class="w-3.5 md:w-5 bg-sky-300 group-hover:bg-sky-400 rounded-t-lg transition-all" style="height: 48%;"></div>
+                  </div>
+                  <span class="text-xs text-slate-500 font-medium">มิ.ย.</span>
+                </div>
+                <!-- Jul -->
+                <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer">
+                  <div class="text-[10px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity font-mono">3,600u</div>
+                  <div class="w-full flex justify-center items-end gap-1.5 h-44">
+                    <div class="w-3.5 md:w-5 bg-blue-500/80 group-hover:bg-blue-600 rounded-t-lg transition-all" style="height: 88%;"></div>
+                    <div class="w-3.5 md:w-5 bg-sky-300 group-hover:bg-sky-400 rounded-t-lg transition-all" style="height: 55%;"></div>
+                  </div>
+                  <span class="text-xs text-slate-500 font-medium">ก.ค.</span>
+                </div>
+                <!-- Aug -->
+                <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer">
+                  <div class="text-[10px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity font-mono">3,200u</div>
+                  <div class="w-full flex justify-center items-end gap-1.5 h-44">
+                    <div class="w-3.5 md:w-5 bg-blue-500/80 group-hover:bg-blue-600 rounded-t-lg transition-all" style="height: 70%;"></div>
+                    <div class="w-3.5 md:w-5 bg-sky-300 group-hover:bg-sky-400 rounded-t-lg transition-all" style="height: 46%;"></div>
+                  </div>
+                  <span class="text-xs text-slate-500 font-medium">ส.ค.</span>
+                </div>
+                <!-- Sep -->
+                <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer">
+                  <div class="text-[10px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity font-mono">3,450u</div>
+                  <div class="w-full flex justify-center items-end gap-1.5 h-44">
+                    <div class="w-3.5 md:w-5 bg-blue-500/80 group-hover:bg-blue-600 rounded-t-lg transition-all" style="height: 82%;"></div>
+                    <div class="w-3.5 md:w-5 bg-sky-300 group-hover:bg-sky-400 rounded-t-lg transition-all" style="height: 50%;"></div>
+                  </div>
+                  <span class="text-xs text-slate-500 font-medium">ก.ย.</span>
+                </div>
+                <!-- Oct (Active) -->
+                <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end bg-blue-50/60 rounded-2xl p-1 group cursor-pointer">
+                  <div class="text-[10px] text-blue-700 font-bold font-mono">3,420u</div>
+                  <div class="w-full flex justify-center items-end gap-1.5 h-44">
+                    <div class="w-3.5 md:w-5 bg-blue-600 rounded-t-lg shadow-sm" style="height: 80%;"></div>
+                    <div class="w-3.5 md:w-5 bg-sky-400 rounded-t-lg shadow-sm" style="height: 52%;"></div>
+                  </div>
+                  <span class="text-xs text-blue-700 font-bold">ต.ค. (ล่าสุด)</span>
+                </div>
+              </div>
+
+              <!-- Mini Footer Tip -->
+              <div class="flex items-center justify-between text-xs text-slate-400">
+                <span>อัตราเฉลี่ย: ไฟฟ้า 76.0 หน่วย/ห้อง • น้ำประปา 10.8 หน่วย/ห้อง</span>
+                <span class="text-emerald-600 font-medium">↓ ใช้ไฟน้อยลง 0.8% เทียบกับเดือนก่อน</span>
+              </div>
+            </div>
+
+            <!-- Occupancy Doughnut Visualization -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-100 card-shadow flex flex-col justify-between">
+              <div>
+                <h3 class="text-base font-bold text-slate-900 tracking-tight">สัดส่วนการเข้าพัก</h3>
+                <p class="text-xs text-slate-400 mt-0.5">จำแนกตามห้องพักที่มีผู้เช่าและห้องว่าง</p>
+              </div>
+
+              <!-- Donut Visual -->
+              <div class="relative flex items-center justify-center my-4">
+                <svg class="w-44 h-44 -rotate-90" viewBox="0 0 36 36">
+                  <circle cx="18" cy="18" r="15.915" fill="none" stroke="#f1f5f9" stroke-width="3.8"/>
+                  <circle cx="18" cy="18" r="15.915" fill="none" stroke="#2563eb" stroke-width="3.8"
+                          stroke-dasharray="93.8, 100" stroke-linecap="round"/>
+                  <circle cx="18" cy="18" r="15.915" fill="none" stroke="#cbd5e1" stroke-width="3.8"
+                          stroke-dasharray="6.2, 100" stroke-dashoffset="-93.8"/>
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                  <span class="text-3xl font-bold text-slate-900 tracking-tight">93.8%</span>
+                  <span class="text-xs text-slate-400 font-medium">เข้าพัก 45/48 ห้อง</span>
+                </div>
+              </div>
+
+              <div class="space-y-2 pt-3 border-t border-slate-100 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="flex items-center gap-2 text-slate-600">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> สัญญาเช่าปกติ
+                  </span>
+                  <span class="font-bold text-slate-900">45 ห้อง</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="flex items-center gap-2 text-slate-600">
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span> ห้องว่างพร้อมเข้าอยู่
+                  </span>
+                  <span class="font-bold text-slate-900">3 ห้อง</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Recent Room Utility Table with Live Calculation Badge -->
+          <div class="bg-white rounded-3xl border border-slate-100 card-shadow overflow-hidden">
+            <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 class="text-base font-bold text-slate-900">รายการบันทึกมิเตอร์ & ออกบิล (งวดปัจจุบัน)</h3>
+                <p class="text-xs text-slate-400">ระบบคำนวณเงินอัตโนมัติตามเรทและหน่วยขั้นต่ำ</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="text" placeholder="พิมพ์ค้นหาห้อง เช่น 101..." class="px-3.5 py-1.5 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-48 font-normal">
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50/80 text-slate-500 font-medium border-b border-slate-100">
+                  <tr>
+                    <th class="py-3 px-5">ห้องพัก</th>
+                    <th class="py-3 px-4">ผู้เช่า</th>
+                    <th class="py-3 px-4">มิเตอร์ไฟ (ก่อน → ปัจจุบัน)</th>
+                    <th class="py-3 px-4">มิเตอร์น้ำ (ก่อน → ปัจจุบัน)</th>
+                    <th class="py-3 px-4">ค่าห้อง + น้ำไฟ</th>
+                    <th class="py-3 px-4">สถานะบิล</th>
+                    <th class="py-3 px-5 text-right">การจัดการ</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 font-normal">
+                  <tr class="hover:bg-slate-50/60 transition-colors">
+                    <td class="py-3.5 px-5 font-bold text-slate-900 text-sm">101</td>
+                    <td class="py-3.5 px-4 text-slate-700">คุณสมชาย ใจดี</td>
+                    <td class="py-3.5 px-4 text-slate-600">1,240 → <strong class="text-blue-600">1,320</strong> (+80 หน่วย)</td>
+                    <td class="py-3.5 px-4 text-slate-600">450 → <strong class="text-sky-600">458</strong> (+8 หน่วย)</td>
+                    <td class="py-3.5 px-4 font-bold text-slate-900">฿4,520</td>
+                    <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">ออกบิลแล้ว</span></td>
+                    <td class="py-3.5 px-5 text-right">
+                      <button onclick="toggleBillModal(true)" class="px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors">ดูใบเสร็จ</button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-slate-50/60 transition-colors">
+                    <td class="py-3.5 px-5 font-bold text-slate-900 text-sm">102</td>
+                    <td class="py-3.5 px-4 text-slate-700">คุณอรอนงค์ มีสุข</td>
+                    <td class="py-3.5 px-4 text-slate-600">2,110 → <strong class="text-blue-600">2,195</strong> (+85 หน่วย)</td>
+                    <td class="py-3.5 px-4 text-slate-600">620 → <strong class="text-sky-600">632</strong> (+12 หน่วย)</td>
+                    <td class="py-3.5 px-4 font-bold text-slate-900">฿4,665</td>
+                    <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">ออกบิลแล้ว</span></td>
+                    <td class="py-3.5 px-5 text-right">
+                      <button onclick="toggleBillModal(true)" class="px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors">ดูใบเสร็จ</button>
+                    </td>
+                  </tr>
+                  <tr class="bg-amber-50/30 hover:bg-amber-50/60 transition-colors">
+                    <td class="py-3.5 px-5 font-bold text-slate-900 text-sm">103</td>
+                    <td class="py-3.5 px-4 text-slate-700">คุณธนกร สุขเจริญ</td>
+                    <td class="py-3.5 px-4 text-amber-700 font-medium">3,450 → <em class="text-slate-400">ยังไม่จด</em></td>
+                    <td class="py-3.5 px-4 text-amber-700 font-medium">890 → <em class="text-slate-400">ยังไม่จด</em></td>
+                    <td class="py-3.5 px-4 text-slate-400">รอคำนวณ</td>
+                    <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-100 text-amber-800">รอจดมิเตอร์</span></td>
+                    <td class="py-3.5 px-5 text-right">
+                      <button onclick="selectConcept(3)" class="px-3 py-1.5 rounded-xl text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white transition-colors shadow-sm">จดเลขทันที</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </main>
+      </div>
+
+      <!-- ================= CONCEPT 2: MODERN STUDIO (WHITE + INDIGO + AREA CHART) ================= -->
+      <div id="concept-2" class="concept-view hidden bg-white rounded-3xl border border-slate-100 card-shadow overflow-hidden min-h-[760px] p-6 md:p-8 space-y-6">
+        
+        <!-- Top App Navigation -->
+        <div class="flex items-center justify-between pb-5 border-b border-slate-100">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold text-base shadow-lg shadow-indigo-500/25">
+              AP
+            </div>
+            <div>
+              <div class="text-base font-bold text-slate-900">Apartment Pro • Modern Studio</div>
+              <div class="text-xs text-slate-400">มุมมองบริหารระดับผู้ประกอบการ</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">
+              รอบบัญชี 2569
+            </span>
+          </div>
+        </div>
+
+        <!-- Floor by Floor Interactive Room Map (ผังห้องพักรายชั้น) -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-slate-900">ผังห้องพักแบบ Interactive Floor Matrix (ชั้น 1 & ชั้น 2)</h3>
+            <span class="text-xs text-slate-400">เขียว = มีผู้เช่า • เทา = ว่าง</span>
+          </div>
+          
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-3">
+            <div class="bg-slate-50/70 p-3 rounded-2xl border border-emerald-300 text-center space-y-1 hover:border-emerald-500 transition-colors">
+              <div class="text-xs font-bold text-slate-800">101</div>
+              <div class="text-[10px] text-emerald-600 font-medium">● ผู้เช่าปกติ</div>
+              <div class="text-[10px] text-slate-400">จดแล้ว</div>
+            </div>
+            <div class="bg-slate-50/70 p-3 rounded-2xl border border-emerald-300 text-center space-y-1 hover:border-emerald-500 transition-colors">
+              <div class="text-xs font-bold text-slate-800">102</div>
+              <div class="text-[10px] text-emerald-600 font-medium">● ผู้เช่าปกติ</div>
+              <div class="text-[10px] text-slate-400">จดแล้ว</div>
+            </div>
+            <div class="bg-amber-50/50 p-3 rounded-2xl border-2 border-dashed border-amber-400 text-center space-y-1 animate-pulse">
+              <div class="text-xs font-bold text-amber-900">103</div>
+              <div class="text-[10px] text-amber-700 font-medium">⚠️ รอจด</div>
+              <div class="text-[10px] text-amber-600">คลิกเพื่อจด</div>
+            </div>
+            <div class="bg-slate-100/50 p-3 rounded-2xl border border-slate-200 text-center space-y-1">
+              <div class="text-xs font-bold text-slate-400">104</div>
+              <div class="text-[10px] text-slate-400">○ ห้องว่าง</div>
+              <div class="text-[10px] text-slate-400">-</div>
+            </div>
+            <div class="bg-slate-50/70 p-3 rounded-2xl border border-emerald-300 text-center space-y-1">
+              <div class="text-xs font-bold text-slate-800">105</div>
+              <div class="text-[10px] text-emerald-600 font-medium">● ผู้เช่าปกติ</div>
+              <div class="text-[10px] text-slate-400">จดแล้ว</div>
+            </div>
+            <div class="bg-slate-50/70 p-3 rounded-2xl border border-emerald-300 text-center space-y-1">
+              <div class="text-xs font-bold text-slate-800">106</div>
+              <div class="text-[10px] text-emerald-600 font-medium">● ผู้เช่าปกติ</div>
+              <div class="text-[10px] text-slate-400">จดแล้ว</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Smooth Area Spline Chart -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-100 card-shadow space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">แนวโน้มรายรับค่าเช่า + ค่าน้ำไฟรายเดือน (Area Curve)</h3>
+              <p class="text-xs text-slate-400">เปรียบเทียบการชำระเงินตรงเวลาในแต่ละรอบ</p>
+            </div>
+            <div class="text-sm font-bold text-indigo-600">
+              รวมปีนี้: ฿2,480,000
+            </div>
+          </div>
+
+          <div class="h-44 w-full relative pt-2">
+            <svg class="w-full h-full" viewBox="0 0 500 130" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="area-indigo-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#4f46e5" stop-opacity="0.0"/>
+                </linearGradient>
+              </defs>
+              <line x1="0" y1="30" x2="500" y2="30" stroke="#f1f5f9" stroke-dasharray="4"/>
+              <line x1="0" y1="65" x2="500" y2="65" stroke="#f1f5f9" stroke-dasharray="4"/>
+              <line x1="0" y1="100" x2="500" y2="100" stroke="#f1f5f9" stroke-dasharray="4"/>
+              <path d="M 0,90 Q 75,50 150,75 T 300,35 T 500,50 L 500,130 L 0,130 Z" fill="url(#area-indigo-grad)"/>
+              <path d="M 0,90 Q 75,50 150,75 T 300,35 T 500,50" fill="none" stroke="#4f46e5" stroke-width="3"/>
+            </svg>
+            <div class="flex justify-between text-xs text-slate-400 pt-2 font-medium">
+              <span>พ.ค.</span>
+              <span>มิ.ย.</span>
+              <span>ก.ค.</span>
+              <span>ส.ค.</span>
+              <span>ก.ย.</span>
+              <span class="text-indigo-600 font-bold">ต.ค. (ปัจจุบัน)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= CONCEPT 3: SMART INSPECTOR (MOBILE-FIRST WALKTHROUGH) ================= -->
+      <div id="concept-3" class="concept-view hidden bg-white rounded-3xl border border-slate-100 card-shadow overflow-hidden min-h-[760px] p-6 space-y-6">
+        
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-blue-50 text-blue-700">
+              ⚡ Smart Fast Entry
+            </div>
+            <h2 class="text-xl font-bold text-slate-900 mt-1">โหมดเดินจดมิเตอร์ & คำนวณเงินสดใส</h2>
+            <p class="text-xs text-slate-500">พิมพ์เลขมิเตอร์ปัจจุบัน ยอดเงินและผลต่างจะคำนวณขึ้นมาทันที</p>
+          </div>
+        </div>
+
+        <!-- Live Interactive Meter Calculator Card (ห้อง 103) -->
+        <div class="bg-gradient-to-br from-white to-slate-50 rounded-3xl p-6 border-2 border-blue-500/30 card-shadow space-y-5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-blue-500/25">
+                103
+              </span>
+              <div>
+                <h4 class="font-bold text-slate-900 text-base">ห้อง 103 (ชั้น 1) • คุณธนกร สุขเจริญ</h4>
+                <div class="text-xs text-slate-500">ค่าห้อง: ฿3,500/เดือน • แพ็กเกจไฟ ฿8.00/u • น้ำ ฿18.00/u (ขั้นต่ำ ฿100)</div>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
+              สถานะ: กำลังจดบันทึก
+            </span>
+          </div>
+
+          <!-- Input Fields with Live Calculation -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Electricity -->
+            <div class="bg-white p-4.5 rounded-2xl border border-slate-200 space-y-2">
+              <div class="flex items-center justify-between text-xs font-medium text-slate-500">
+                <span class="flex items-center gap-1.5 text-blue-600 font-bold">
+                  ⚡ มิเตอร์ไฟฟ้า
+                </span>
+                <span>เลขงวดก่อน: <strong class="text-slate-800">3,450</strong></span>
+              </div>
+              <div class="flex items-center gap-3">
+                <input id="calc-elec-input" type="number" value="3542" oninput="calculateLiveBill()" 
+                       class="w-full text-lg font-bold px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900">
+                <span class="text-xs text-slate-400 whitespace-nowrap">หน่วย</span>
+              </div>
+              <div class="text-xs text-slate-500 flex justify-between pt-1">
+                <span>ใช้ไป: <strong id="calc-elec-diff" class="text-blue-600 font-bold">+92</strong> หน่วย</span>
+                <span>คิดเป็นเงิน: <strong id="calc-elec-price" class="text-slate-900 font-bold">฿736.00</strong></span>
+              </div>
+            </div>
+
+            <!-- Water -->
+            <div class="bg-white p-4.5 rounded-2xl border border-slate-200 space-y-2">
+              <div class="flex items-center justify-between text-xs font-medium text-slate-500">
+                <span class="flex items-center gap-1.5 text-sky-600 font-bold">
+                  💧 มิเตอร์น้ำประปา
+                </span>
+                <span>เลขงวดก่อน: <strong class="text-slate-800">890</strong></span>
+              </div>
+              <div class="flex items-center gap-3">
+                <input id="calc-water-input" type="number" value="902" oninput="calculateLiveBill()" 
+                       class="w-full text-lg font-bold px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900">
+                <span class="text-xs text-slate-400 whitespace-nowrap">หน่วย</span>
+              </div>
+              <div class="text-xs text-slate-500 flex justify-between pt-1">
+                <span>ใช้ไป: <strong id="calc-water-diff" class="text-sky-600 font-bold">+12</strong> หน่วย</span>
+                <span>คิดเป็นเงิน: <strong id="calc-water-price" class="text-slate-900 font-bold">฿216.00</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Calculation Banner & Action -->
+          <div class="bg-slate-900 text-white rounded-2xl p-4.5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <div class="text-xs text-slate-400">ยอดรวมทั้งสิ้น (ค่าห้อง ฿3,500 + ค่าไฟ + ค่าน้ำ)</div>
+              <div id="calc-grand-total" class="text-3xl font-bold tracking-tight text-emerald-400 mt-0.5">฿4,452.00</div>
+            </div>
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+              <button onclick="alert('บันทึกข้อมูลเรียบร้อย')" class="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs transition-all shadow-md">
+                ✓ บันทึกมิเตอร์ & ออกบิลทันที
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= INVOICE / BILL PREVIEW MODAL ================= -->
+  <div id="bill-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 md:p-8 card-shadow space-y-6 relative border border-slate-100">
+      
+      <!-- Close button -->
+      <button onclick="toggleBillModal(false)" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 p-1.5 rounded-xl hover:bg-slate-100">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <!-- Bill Header -->
+      <div class="text-center space-y-1 pb-4 border-b border-slate-100">
+        <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-xl mx-auto shadow-md shadow-blue-500/20 mb-2">
+          A
+        </div>
+        <h3 class="text-xl font-bold text-slate-900">หอพัก แกรนด์ วิลล์ (Grand Ville)</h3>
+        <p class="text-xs text-slate-500">ใบแจ้งหนี้ค่าน้ำ-ค่าไฟและค่าเช่าห้องพัก ประจำเดือน ตุลาคม 2569</p>
+      </div>
+
+      <!-- Bill Room & Date Info -->
+      <div class="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-100">
+        <div>
+          <span class="text-slate-400 block">ห้องพัก / ผู้เช่า:</span>
+          <strong class="text-slate-900 text-sm">ห้อง 101 (คุณสมชาย ใจดี)</strong>
+        </div>
+        <div class="text-right">
+          <span class="text-slate-400 block">วันที่ออกบิล:</span>
+          <strong class="text-slate-900 text-sm">27 ตุลาคม 2569</strong>
+        </div>
+      </div>
+
+      <!-- Items Table -->
+      <div class="space-y-2 text-xs">
+        <div class="flex justify-between py-2 border-b border-slate-100 text-slate-500 font-medium">
+          <span>รายการ</span>
+          <span>หน่วยที่ใช้</span>
+          <span>จำนวนเงิน</span>
+        </div>
+        <div class="flex justify-between py-1.5 text-slate-800">
+          <span>ค่าเช่าห้องพัก (ห้อง Standard ชั้น 1)</span>
+          <span class="text-slate-400">1 เดือน</span>
+          <span class="font-bold">฿3,500.00</span>
+        </div>
+        <div class="flex justify-between py-1.5 text-slate-800">
+          <span>ค่าไฟฟ้า (1,240 → 1,320)</span>
+          <span class="text-slate-600">80 หน่วย</span>
+          <span class="font-bold">฿640.00</span>
+        </div>
+        <div class="flex justify-between py-1.5 text-slate-800">
+          <span>ค่าน้ำประปา (450 → 458)</span>
+          <span class="text-slate-600">8 หน่วย</span>
+          <span class="font-bold">฿380.00</span>
+        </div>
+      </div>
+
+      <!-- Total -->
+      <div class="pt-4 border-t-2 border-dashed border-slate-200 flex items-center justify-between">
+        <div>
+          <span class="text-xs text-slate-500">ยอดรวมชำระสุทธิ (Total Amount)</span>
+          <div class="text-3xl font-bold text-blue-600">฿4,520.00</div>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+          พร้อมพิมพ์ / ส่งออก PDF
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3 pt-2">
+        <button onclick="window.print()" class="flex-1 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs transition-colors flex items-center justify-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          พิมพ์ใบเสร็จ (Print)
+        </button>
+        <button onclick="toggleBillModal(false)" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-medium">
+          ปิดหน้าต่าง
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentConcept = 1;
+
+    const concepts = {
+      1: {
+        title: "แบบที่ 1: Clean White Minimalist (โทนขาวละมุน + ข้อมูลชัดเจน)",
+        desc: "เน้นความสบายตาด้วยโทนสีขาวสะอาด ตัดเส้นบางด้วย Slate-200 ตัวอักษร Kanit คมชัด อ่านง่าย มีชาร์ตเปรียบเทียบการใช้น้ำ-ไฟที่คลิกดูได้"
+      },
+      2: {
+        title: "แบบที่ 2: Modern Studio (ผังห้องพัก Floor Matrix + Area Curve)",
+        desc: "แสดงภาพรวมหอพักรายชั้น (Floor-by-floor) พร้อมสถิติรายได้แบบ Area Spline และสีสัญลักษณ์แสดงสถานะห้องพักทันที"
+      },
+      3: {
+        title: "แบบที่ 3: Smart Inspector (โหมดเดินจดมิเตอร์พร้อมคำนวณสด)",
+        desc: "ออกแบบให้พนักงานเดินจดมิเตอร์ตามห้อง กรอกเลขปัจจุบันแล้วแสดงส่วนต่างและยอดเงินคำนวณทันทีแบบ Live Feedback"
+      }
+    };
+
+    function selectConcept(num) {
+      currentConcept = num;
+      document.querySelectorAll('.concept-view').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`concept-${num}`).classList.remove('hidden');
+
+      document.getElementById('concept-title').innerText = concepts[num].title;
+      document.getElementById('concept-desc').innerText = concepts[num].desc;
+
+      for (let i = 1; i <= 3; i++) {
+        const btn = document.getElementById(`tab-btn-${i}`);
+        if (i === num) {
+          btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-blue-600 shadow-sm transition-all whitespace-nowrap";
+        } else {
+          btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap";
+        }
+      }
+    }
+
+    function setViewMode(mode) {
+      const container = document.getElementById('viewport-frame-container');
+      const desktopBtn = document.getElementById('view-desktop-btn');
+      const mobileBtn = document.getElementById('view-mobile-btn');
+
+      if (mode === 'mobile') {
+        container.style.maxWidth = '414px';
+        container.classList.add('border-[12px]', 'border-slate-800', 'rounded-[44px]', 'p-2', 'bg-slate-800', 'shadow-2xl');
+        mobileBtn.className = "px-3.5 py-1.5 rounded-xl text-xs font-medium bg-white text-slate-900 shadow-sm transition-all flex items-center gap-1.5";
+        desktopBtn.className = "px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-500 hover:text-slate-900 transition-all flex items-center gap-1.5";
+      } else {
+        container.style.maxWidth = '100%';
+        container.classList.remove('border-[12px]', 'border-slate-800', 'rounded-[44px]', 'p-2', 'bg-slate-800', 'shadow-2xl');
+        desktopBtn.className = "px-3.5 py-1.5 rounded-xl text-xs font-medium bg-white text-slate-900 shadow-sm transition-all flex items-center gap-1.5";
+        mobileBtn.className = "px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-500 hover:text-slate-900 transition-all flex items-center gap-1.5";
+      }
+    }
+
+    function toggleBillModal(show) {
+      const modal = document.getElementById('bill-modal');
+      if (show) {
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function calculateLiveBill() {
+      const elecInput = parseFloat(document.getElementById('calc-elec-input').value) || 3450;
+      const waterInput = parseFloat(document.getElementById('calc-water-input').value) || 890;
+
+      const elecPrev = 3450;
+      const waterPrev = 890;
+      const roomPrice = 3500;
+
+      const elecDiff = Math.max(0, elecInput - elecPrev);
+      const waterDiff = Math.max(0, waterInput - waterPrev);
+
+      const elecPrice = elecDiff * 8.00;
+      const waterPrice = Math.max(100, waterDiff * 18.00); // 100 baht min rate
+
+      document.getElementById('calc-elec-diff').innerText = `+${elecDiff}`;
+      document.getElementById('calc-elec-price').innerText = `฿${elecPrice.toFixed(2)}`;
+
+      document.getElementById('calc-water-diff').innerText = `+${waterDiff}`;
+      document.getElementById('calc-water-price').innerText = `฿${waterPrice.toFixed(2)}`;
+
+      const grandTotal = roomPrice + elecPrice + waterPrice;
+      document.getElementById('calc-grand-total').innerText = `฿${grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    }
+  </script>
+</body>
+</html>

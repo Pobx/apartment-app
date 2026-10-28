@@ -1,0 +1,80 @@
+{
+  "id": "apartment-realm",
+  "realm": "apartment-realm",
+  "enabled": true,
+  "displayName": "Apartment Management Realm",
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "roles": {
+    "realm": [
+      {
+        "name": "admin",
+        "description": "Administrator with full management access"
+      },
+      {
+        "name": "staff",
+        "description": "Staff with meter reading and billing rights"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "apartment-web",
+      "name": "Apartment Web SPA",
+      "enabled": true,
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "protocol": "openid-connect"
+    },
+    {
+      "clientId": "apartment-api",
+      "name": "Apartment Backend Resource Server",
+      "enabled": true,
+      "bearerOnly": true,
+      "protocol": "openid-connect"
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "email": "admin@apartments.local",
+      "firstName": "System",
+      "lastName": "Administrator",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "admin"
+      ]
+    },
+    {
+      "username": "staff",
+      "enabled": true,
+      "email": "staff@apartments.local",
+      "firstName": "Frontdesk",
+      "lastName": "Staff",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "staff123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "staff"
+      ]
+    }
+  ]
+}
